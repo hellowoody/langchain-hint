@@ -16,6 +16,7 @@ lerna-debug.log*
 
 
 *.db
+*.lock
 
 __pycache__
 
