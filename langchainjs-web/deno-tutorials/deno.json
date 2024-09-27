@@ -9,6 +9,8 @@
     "@langchain/community/chat_models/zhipuai":"https://esm.sh/@langchain/community/chat_models/zhipuai",
     "@langchain/core/messages":"https://esm.sh/@langchain/core/messages",
     "@langchain/core/output_parsers":"https://esm.sh/@langchain/core/output_parsers",
-    "@langchain/core/prompts":"https://esm.sh/@langchain/core/prompts"
+    "@langchain/core/prompts":"https://esm.sh/@langchain/core/prompts",
+    "@langchain/core/chat_history":"https://esm.sh/@langchain/core/chat_history",
+    "@langchain/core/runnables":"https://esm.sh/@langchain/core/runnables"
   }
 }
