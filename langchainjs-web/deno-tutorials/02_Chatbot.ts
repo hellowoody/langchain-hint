@@ -43,8 +43,9 @@ import { RunnableWithMessageHistory } from "@langchain/core/runnables"
 const messageHistories: Record<string,InMemoryChatMessageHistory> = {}
 
 const prompt = ChatPromptTemplate.fromMessages([
-    ["system","你是一个乐于助人的助手，能够记住用户与你分享的所有细节。"],
+    ["system","You are a helpful assistant who remembers all details the user shares with you."],
     ["placeholder","{chat_history}"],
+
     ["human","{input}"]
 ])
 
@@ -64,7 +65,7 @@ const withMessageHistory = new RunnableWithMessageHistory({
 
 const config = {
     configurable: {
-        sessionId: "abc1",
+      sessionId: "abc",
     },
 };
 
@@ -80,10 +81,37 @@ console.log(response.content)
 
 const followupResponse = await withMessageHistory.invoke(
     {
-        input: "我叫什么？",
+        input: "我是谁？",
     },
     config
 );
 
 log("followupResponse.content")
 console.log(followupResponse.content)
+
+const config2 = {
+    configurable:{
+        sessionId:"abc_2"
+    }
+}
+
+const resp2 = await withMessageHistory.invoke(
+    {
+        input:"我的名字是什么？"
+    },
+    config2
+)
+
+log("resp2")
+
+console.log(resp2.content)
+
+const resp3 = await withMessageHistory.invoke(
+    {
+        input:"我的名字是什么？"
+    },
+    config
+)
+
+log("resp3")
+console.log(resp3.content)
