@@ -12,14 +12,14 @@ import { ChatPromptTemplate} from "@langchain/core/prompts"
 const prompt = ChatPromptTemplate.fromMessages([
     ["system","You are a helpful assistant who remembers all details the user shares with you."],
     ["placeholder","{chat_history}"],
-
     ["human","{input}"]
 ])
 
 import type {BaseMessage} from "@langchain/core/messages"
 import {
     RunnablePassthrough,
-    RunnableSequence
+    RunnableSequence,
+    RunnableWithMessageHistory
 } from "@langchain/core/runnables"
 
 type ChainInput = {
@@ -70,3 +70,54 @@ resp2.content;
 
 log("resp2.content")
 console.log(resp2.content)
+
+
+import { InMemoryChatMessageHistory } from "@langchain/core/chat_history"
+
+const messageHistories: Record<string,InMemoryChatMessageHistory> = {}
+
+const withMessageHistory = new RunnableWithMessageHistory({
+    runnable:chain,
+    getMessageHistory:async sessionId => {
+        if(messageHistories[sessionId] === undefined){
+           const messageHistory = new InMemoryChatMessageHistory()
+           await messageHistory.addMessages(messages)
+           messageHistories[sessionId] = messageHistory
+        }
+        return messageHistories[sessionId]
+    },
+    inputMessagesKey:"input",
+    historyMessagesKey:"chat_history"
+})
+
+const config = {
+    configurable:{
+        sessionId:"id01"
+    }
+}
+
+const resp3 = await withMessageHistory.invoke(
+    {
+        input:"我的名字是什么？",
+        chat_history:[]
+    },
+    config
+)
+
+log("resp3")
+console.log(resp3.content)
+
+const resp4 = await withMessageHistory.invoke(
+    {
+        input:"我最爱吃的冰淇凌口味",
+        chat_history:[]
+    },
+    config
+)
+
+log("resp4")
+console.log(resp4.content)
+
+
+
+

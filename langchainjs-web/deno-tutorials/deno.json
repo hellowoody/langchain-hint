@@ -2,7 +2,8 @@
   "tasks": {
     "t01":"deno run -A --watch 01_LCEL.ts",
     "t02":"deno run -A --watch 02_Chatbot.ts",
-    "t021":"deno run -A --watch 02_Chatbot_history.ts"
+    "t021":"deno run -A --watch 02_Chatbot_history.ts",
+    "t022":"deno run -A --watch 02_Chatbot_streaming.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
