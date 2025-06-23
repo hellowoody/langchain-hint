@@ -3,18 +3,24 @@ from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 from langchain_core.messages import AIMessageChunk,HumanMessage
 from chain_wrapper import chat as chat_chain
+from chain_wrapper import chat_reason as chat_chain_reason
 
 class Item(BaseModel):
     content: str
 
 router = APIRouter()
 
-async def generate_response(content):
+async def generate_response(content,type):
     # chat_chain.config["configurable"]["session_id"] = time.time()
     print(chat_chain.config)
 
+    if type == "standard":
+        app = chat_chain.app
+    elif type == "reason":
+        app = chat_chain_reason.app
+
     input_messages = [HumanMessage(content)]
-    async for message_chunk,metadata in chat_chain.app.astream(
+    async for message_chunk,metadata in app.astream(
         {"messages":input_messages},
         config=chat_chain.config,
         stream_mode="messages",
@@ -34,4 +40,9 @@ async def generate_response(content):
 @router.post("/api/chat")
 async def chat(item:Item):
     print("传输的参数为：",item.content)
-    return StreamingResponse(generate_response(item.content),media_type="text/event-stream")
+    return StreamingResponse(generate_response(item.content,"standard"),media_type="text/event-stream")
+
+@router.post("/api/chat_reason")
+async def chat_reason(item:Item):
+    print("传输的参数为：",item.content)
+    return StreamingResponse(generate_response(item.content,"reason"),media_type="text/event-stream")

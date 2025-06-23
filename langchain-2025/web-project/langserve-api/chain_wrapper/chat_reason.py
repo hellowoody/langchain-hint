@@ -17,7 +17,17 @@ workflow = StateGraph(state_schema=MessagesState)
 
 prompt_template = ChatPromptTemplate.from_messages(
     [
-        ("system","你是一位乐于助人的助手。尽你所能回答所有问题。"),
+        #         ("system","你是一位乐于助人的助手。尽你所能回答所有问题。"),
+        ("system","""
+            你是一个严谨的科学家。请按以下步骤思考：
+            1. 问题分析：{messages}
+            2. 概念拆解：
+            3. 原理追溯：
+            4. 逻辑推导：
+            5. 结论验证：
+
+            最终答案：
+        """),
         MessagesPlaceholder(variable_name="messages"),
     ]
 )
